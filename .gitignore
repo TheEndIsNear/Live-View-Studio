@@ -27,6 +27,11 @@ live_view_studio-*.tar
 
 # Ignore uploaded image files.
 /priv/static/uploads/
+/priv/static/images
+/priv/static/fonts
+/priv/static/*.gz
+/priv/static/*.ico
+/priv/static/*.txt
 
 # Ignore digested assets cache.
 /priv/static/cache_manifest.json
