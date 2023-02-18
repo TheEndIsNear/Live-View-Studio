@@ -39,14 +39,18 @@ defmodule LiveViewStudioWeb.LightLive do
           max="100"
           name="brightness"
           value={@brightness}
+          phx-debounce="250"
         />
       </form>
 
+      <div>
+        <h2>Light Temperature Color</h2>
+      </div>
       <form phx-change="color-update">
         <%= for temp <- ["3000", "4000", "5000"] do %>
           <input
             type="radio"
-            id={temp}
+            id="temps"
             name="temp"
             value={temp}
             checked={@temperature == temp}
