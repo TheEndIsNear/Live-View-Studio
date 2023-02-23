@@ -18,45 +18,12 @@ defmodule LiveViewStudioWeb.VehiclesLive do
     ~H"""
     <h1>🚙 Find a Vehicle 🚘</h1>
     <div id="vehicles">
-      <form phx-submit="search" phx-change="suggest">
-        <input
-          type="text"
-          name="query"
-          value=""
-          placeholder="Make or model"
-          autofocus
-          autocomplete="off"
-          list="matches"
-          phx-debounce="300"
-        />
-
-        <button>
-          <img src="/images/search.svg" />
-        </button>
-      </form>
-
-      <datalist id="matches">
-        <option :for={match <- @matches} value={match}>
-          <%= match %>
-        </option>
-      </datalist>
-
+      <.filter_form />
+      <.datalist matches={@matches} />
       <.loading loading={@loading} />
 
       <div class="vehicles">
-        <ul>
-          <li :for={vehicle <- @vehicles}>
-            <span class="make-model">
-              <%= vehicle.make_model %>
-            </span>
-            <span class="color">
-              <%= vehicle.color %>
-            </span>
-            <span class={"status #{vehicle.status}"}>
-              <%= vehicle.status %>
-            </span>
-          </li>
-        </ul>
+        <.vehicles vehicles={@vehicles} />
       </div>
     </div>
     """
@@ -73,5 +40,54 @@ defmodule LiveViewStudioWeb.VehiclesLive do
 
   def handle_info({:search, query}, socket) do
     {:noreply, assign(socket, loading: false, vehicles: Vehicles.search(query))}
+  end
+
+  defp filter_form(assigns) do
+    ~H"""
+    <form phx-submit="search" phx-change="suggest">
+      <input
+        type="text"
+        name="query"
+        value=""
+        placeholder="Make or model"
+        autofocus
+        autocomplete="off"
+        list="matches"
+        phx-debounce="300"
+      />
+
+      <button>
+        <img src="/images/search.svg" />
+      </button>
+    </form>
+    """
+  end
+
+  defp vehicles(assigns) do
+    ~H"""
+    <ul>
+      <li :for={vehicle <- @vehicles}>
+        <span class="make-model">
+          <%= vehicle.make_model %>
+        </span>
+        <span class="color">
+          <%= vehicle.color %>
+        </span>
+        <span class={"status #{vehicle.status}"}>
+          <%= vehicle.status %>
+        </span>
+      </li>
+    </ul>
+    """
+  end
+
+  defp datalist(assigns) do
+    ~H"""
+    <datalist id="matches">
+      <option :for={match <- @matches} value={match}>
+        <%= match %>
+      </option>
+    </datalist>
+    """
   end
 end
