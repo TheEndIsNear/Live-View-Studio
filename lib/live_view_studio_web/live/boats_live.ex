@@ -29,7 +29,6 @@ defmodule LiveViewStudioWeb.BoatsLive do
       <div class="boats">
         <.boat :for={boat <- @boats} boat={boat} />
       </div>
-
     </div>
 
     <.promo>
@@ -47,30 +46,29 @@ defmodule LiveViewStudioWeb.BoatsLive do
 
   def filter_form(assigns) do
     ~H"""
-      <form phx-change="filter">
-        <div class="filters">
-          <select name="type">
-            <%= Phoenix.HTML.Form.options_for_select(
-              type_options(),
-              @filter.type
-            ) %>
-          </select>
-          <div class="prices">
-            <%= for price <- ["$", "$$", "$$$"] do %>
-              <input
-                type="checkbox"
-                name="prices[]"
-                value={price}
-                id={price}
-                checked={price in @filter.prices}
-              />
-              <label for={price}><%= price %></label>
-            <% end %>
-            <input type="hidden" name="prices[]" value="" />
-          </div>
+    <form phx-change="filter">
+      <div class="filters">
+        <select name="type">
+          <%= Phoenix.HTML.Form.options_for_select(
+            type_options(),
+            @filter.type
+          ) %>
+        </select>
+        <div class="prices">
+          <%= for price <- ["$", "$$", "$$$"] do %>
+            <input
+              type="checkbox"
+              name="prices[]"
+              value={price}
+              id={price}
+              checked={price in @filter.prices}
+            />
+            <label for={price}><%= price %></label>
+          <% end %>
+          <input type="hidden" name="prices[]" value="" />
         </div>
-      </form>
-
+      </div>
+    </form>
     """
   end
 
@@ -78,22 +76,22 @@ defmodule LiveViewStudioWeb.BoatsLive do
 
   def boat(assigns) do
     ~H"""
-      <div class="boat">
-          <img src={@boat.image} />
-          <div class="content">
-            <div class="model">
-              <%= @boat.model %>
-            </div>
-            <div class="details">
-              <span class="price">
-                <%= @boat.price %>
-              </span>
-              <span class="type">
-                <%= @boat.type %>
-              </span>
-            </div>
-          </div>
+    <div class="boat">
+      <img src={@boat.image} />
+      <div class="content">
+        <div class="model">
+          <%= @boat.model %>
         </div>
+        <div class="details">
+          <span class="price">
+            <%= @boat.price %>
+          </span>
+          <span class="type">
+            <%= @boat.type %>
+          </span>
+        </div>
+      </div>
+    </div>
     """
   end
 
