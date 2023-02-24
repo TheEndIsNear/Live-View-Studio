@@ -4,16 +4,28 @@ defmodule LiveViewStudioWeb.ServersLive do
   alias LiveViewStudio.Servers
 
   def mount(_params, _session, socket) do
+    IO.inspect(self(), label: :mount)
     servers = Servers.list_servers()
 
     socket =
       assign(socket,
         servers: servers,
-        selected_server: hd(servers),
         coffees: 0
       )
 
     {:ok, socket}
+  end
+
+  def handle_params(%{"id" => id}, _URI, socket) do
+    server = Servers.get_server!(id)
+    {:noreply, assign(socket, selected_server: server, page_title: "What's up #{server.name}")}
+  end
+
+  def handle_params(_params, _URI, socket) do
+    {:noreply,
+     assign(socket,
+       selected_server: hd(socket.assigns.servers)
+     )}
   end
 
   def render(assigns) do
@@ -22,13 +34,14 @@ defmodule LiveViewStudioWeb.ServersLive do
     <div id="servers">
       <div class="sidebar">
         <div class="nav">
-          <a
+          <.link
             :for={server <- @servers}
+            patch={~p"/servers?#{[id: server]}"}
             class={if server == @selected_server, do: "selected"}
           >
             <span class={server.status}></span>
             <%= server.name %>
-          </a>
+          </.link>
         </div>
         <div class="coffees">
           <button phx-click="drink">
@@ -65,6 +78,9 @@ defmodule LiveViewStudioWeb.ServersLive do
             </div>
           </div>
           <div class="links"></div>
+          <.link navigate={~p"/light"}>
+            Adjust Lights
+          </.link>
         </div>
       </div>
     </div>
