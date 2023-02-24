@@ -18,7 +18,7 @@ defmodule LiveViewStudioWeb.VehiclesLive do
     ~H"""
     <h1>🚙 Find a Vehicle 🚘</h1>
     <div id="vehicles">
-      <.filter_form />
+      <.filter_form phx-submit="search" phx-change="suggest" />
       <.datalist matches={@matches} />
       <.loading loading={@loading} />
 
@@ -42,9 +42,11 @@ defmodule LiveViewStudioWeb.VehiclesLive do
     {:noreply, assign(socket, loading: false, vehicles: Vehicles.search(query))}
   end
 
+  attr :rest, :global
+
   defp filter_form(assigns) do
     ~H"""
-    <form phx-submit="search" phx-change="suggest">
+    <form {@rest}>
       <input
         type="text"
         name="query"
@@ -63,6 +65,8 @@ defmodule LiveViewStudioWeb.VehiclesLive do
     """
   end
 
+  attr :vehicles, :list, required: true
+
   defp vehicles(assigns) do
     ~H"""
     <ul>
@@ -80,6 +84,8 @@ defmodule LiveViewStudioWeb.VehiclesLive do
     </ul>
     """
   end
+
+  attr :matches, :list, required: true
 
   defp datalist(assigns) do
     ~H"""
